@@ -1,6 +1,6 @@
-.PHONY: all bench build clean configure haddock hpc install repl run test
+.PHONY: all build clean configure install repl run 
 
-all: install configure build haddock test hpc bench
+all: install configure build
 
 bench:
 	cabal bench --jobs
@@ -16,13 +16,6 @@ clean:
 configure:
 	cabal configure --enable-benchmarks --enable-tests
 
-haddock:
-	cabal haddock --hyperlink-source
-	# dist/doc/html/dicom-dictionary/index.html
-
-hpc:
-	hpc markup --destdir=tmp dist/hpc/tix/tests/tests.tix
-	# tmp/hpc_index.html
 
 install:
 	cabal sandbox init --sandbox  /Users/cerdep/Documents/haskell-workspace/dicom/.cabal-sandbox
@@ -34,6 +27,3 @@ repl:
 run:
 	cabal run --jobs dicom-dictionary
 
-test:
-	cabal test --jobs
-	cabal check
