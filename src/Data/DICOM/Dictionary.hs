@@ -10,9 +10,15 @@ import Numeric
 import qualified Data.Map as DM
 import Data.Maybe
 import Data.DICOM.Model.Dictionary
+import Paths_dicom_dictionary
+--import Paths_
 
-
-mkDictionary::[DictElement] -> DM.Map DicomTag DictElement
+loadDictionary:: IO DicomDictionary
+loadDictionary = do
+  fp <- getDataFileName "/data/dicom.dic"
+  mkDictionary <$> parseDictionary fp 
+  
+mkDictionary::[DictElement] -> DicomDictionary
 mkDictionary =
   DM.fromList.map mkMapEntry 
   where mkMapEntry de = ((groupNbr de, elementNbr de), de)
