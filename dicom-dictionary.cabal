@@ -16,7 +16,7 @@ data-files:          data/dicom.dic
 library
   hs-source-dirs:      src
   ghc-options:         -Wall
-  exposed-modules:     Lib
+  exposed-modules:     Data.DICOM.Dictionary
   build-depends:       base >= 4.7 && < 5
                      , bytestring
                      , attoparsec

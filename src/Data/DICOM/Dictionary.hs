@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Data.DICOM.Dictionary where
 
 import Prelude hiding (takeWhile)
@@ -5,13 +6,11 @@ import Data.Attoparsec.ByteString.Char8
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import Data.Word 
-import System.Environment
 import Numeric
 import qualified Data.Map as DM
 import Data.Maybe
+import Data.DICOM.Model.Dictionary
 
-
-type DicomTag = (Word16,Word16)
 
 mkDictionary::[DictElement] -> DM.Map DicomTag DictElement
 mkDictionary =
