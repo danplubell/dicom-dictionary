@@ -1,0 +1,46 @@
+name:                dicom-dictionary
+version:             0.1.0.0
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            http://github.com/danplubell/dicom-dictionary#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Dan Plubell
+maintainer:          danplubell@gmail.com
+copyright:           2015 Dan Plubell
+category:            Other
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+data-files:          data/dicom.dic
+library
+  hs-source-dirs:      src
+  ghc-options:         -Wall
+  exposed-modules:     Lib
+  build-depends:       base >= 4.7 && < 5
+                     , bytestring
+                     , attoparsec
+                     , containers
+                     , dicom-model  
+  default-language:    Haskell2010
+
+executable dicom-dictionary-exe
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , dicom-dictionary
+  default-language:    Haskell2010
+
+test-suite dicom-dictionary-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , dicom-dictionary
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/danplubell/dicom-dictionary
