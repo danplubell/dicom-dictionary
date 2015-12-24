@@ -1,3 +1,2 @@
 # dicom-dictionary
-
-add description of dicom-dictionary here
+Toy project for experimenting with a dicom dictionary
