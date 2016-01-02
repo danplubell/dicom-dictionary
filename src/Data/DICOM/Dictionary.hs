@@ -1,51 +1,51 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Data.DICOM.Dictionary where
 
-import Prelude hiding (takeWhile)
-import Data.Attoparsec.ByteString.Char8 
+import Data.Attoparsec.ByteString.Char8
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
-import Data.Word 
-import Numeric
+import Data.DICOM.Model.Dictionary
 import qualified Data.Map as DM
 import Data.Maybe
-import Data.DICOM.Model.Dictionary
+import Data.Word
+import Numeric
 import Paths_dicom_dictionary
+import Prelude hiding (takeWhile)
 --import Paths_
 
 loadDictionary:: IO DicomDictionary
 loadDictionary = do
-  fp <- getDataFileName "/data/dicom.dic"
-  mkDictionary <$> parseDictionary fp 
-  
+  fp <- getDataFileName "data/dicom.dic"
+  mkDictionary <$> parseDictionary fp
+
 mkDictionary::[DictElement] -> DicomDictionary
 mkDictionary =
-  DM.fromList.map mkMapEntry 
+  DM.fromList.map mkMapEntry
   where mkMapEntry de = ((groupNbr de, elementNbr de), de)
 
 parseDictionary::FilePath -> IO [DictElement]
 parseDictionary fp = do
     contents <- BS.readFile fp
-    let parsed =  parseOnly dictionaryParser contents 
+    let parsed =  parseOnly dictionaryParser contents
     case parsed of
       Left s  -> error $ "A parse error occured: " ++ s
       Right l -> return $ filter skipNonDictElement  $ concat l
-    where skipNonDictElement e = e == Comment || e == Skip
+    where skipNonDictElement e = e /= Comment && e /= Skip
 
 dictionaryParser:: Parser [[DictElement]]
-dictionaryParser = many' parseDataElement 
+dictionaryParser = many' parseDataElement
 
 parseDataElement::Parser [DictElement]
 parseDataElement = do
     frstChar <- anyChar
     case frstChar of
-      '#' ->  do 
+      '#' ->  do
              _ <- takeTill (=='\n')
              _ <- char '\n'
              return [Comment]
       _   ->  do
           grpNbr <- takeTill (==',')
-          _ <- char ','      
+          _ <- char ','
           elemNbr <- takeTill (==')')
           _ <- char ')'
           _ <- char '\t'
@@ -56,7 +56,7 @@ parseDataElement = do
           vmv <- takeWhile (/= '\t')
           _ <- char '\t'
           ver <- takeWhile (/= '\n')
-          _ <- char '\n'                              
+          _ <- char '\n'
           return $ mkElements grpNbr elemNbr vrv n vmv ver
 
 mkElements::BS.ByteString -> BS.ByteString -> BS.ByteString -> BS.ByteString -> BS.ByteString-> BS.ByteString-> [DictElement]
@@ -74,5 +74,5 @@ mkElements grp ele vrv nam vmv ver =
                      [] -> Nothing
                      _  -> Just $ fst (head grpNbr')
         expandGroup = map mkDataElement
-        mkDataElement grp'  = DictElement grp' (fromJust $ tagNbr ele) vrv nam vmv ver 
-  
+        mkDataElement grp'  = DictElement grp' (fromJust $ tagNbr ele) vrv nam vmv ver
+
