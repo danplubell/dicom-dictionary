@@ -3,6 +3,7 @@ extra-package-dbs: []
 packages:
 - '.'
 - ../dicom-model
+- '../dicom-dictionary-content'
 extra-deps:
 - bimap-0.3.1
 resolver: lts-3.10
