@@ -24,6 +24,7 @@ library
                      , bytestring
                      , attoparsec
                      , containers
+                     , bimap
                      , dicom-model
                      , dicom-dictionary-content
                      
