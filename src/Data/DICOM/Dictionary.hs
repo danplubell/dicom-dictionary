@@ -26,8 +26,9 @@ loadElementDictionary = DM.fromList dictElementList
 loadUIDDictionary::UIDDictionary
 loadUIDDictionary= DB.fromList dicomUIDTable
 
-lookupUIDType::UIDDictionary -> DBS.ByteString -> DicomUID
-lookupUIDType = (DB.!)
 
-lookupUID::UIDDictionary -> DicomUID -> DBS.ByteString
-lookupUID = (DB.!>)
+lookupUIDType::UIDDictionary -> DBS.ByteString -> Maybe DicomUID
+lookupUIDType dd bs = DB.lookup bs dd
+
+lookupUID::UIDDictionary -> DicomUID -> Maybe DBS.ByteString
+lookupUID dd uid  = DB.lookupR uid dd
